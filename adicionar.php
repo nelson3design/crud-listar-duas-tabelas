@@ -1,4 +1,6 @@
 <?php
+
+session_start(); // iniciar a sessão
  include 'config.php';
 
 
@@ -7,6 +9,15 @@
 
 
 <h2>adicionar usuario</h2>
+
+<?php
+if(isset($_SESSION['menssagem'])){
+    echo  $_SESSION['menssagem'];
+    unset( $_SESSION['menssagem']);
+}
+
+?>
+<br><br>
 <form action="adiciona-action.php" method="POST">
 
 <input type="text" placeholder="nome" name="nome">
@@ -28,5 +39,6 @@
 <br><br>
 
 <button type="submit">adicionar</button>
+<button><a style="text-decoration: none;" href="index.php">Cancelar</a></button>
 
 </form>

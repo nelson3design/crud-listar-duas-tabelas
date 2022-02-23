@@ -1,4 +1,9 @@
 <?php
+session_start(); // iniciar a sessão
+
+
+// limpar o buffer de saida
+ob_start();
 
 include 'config.php';
 
@@ -37,17 +42,22 @@ if($sql->rowCount() ===0){
         $sql->bindValue(':id_endereco', $id_endereco );
         $sql->execute();
 
+
+        $_SESSION['menssagem']="<span style=' color: green; font-weight: 700; font-size: 20px'>$nome</span> <span style=' color: green;'> cadastrado com sucesso!</span>";
     
      header("location: index.php");
-     exit;
+     
     
     }else{
+        $_SESSION['menssagem']="<span style=' color: red; font-weight: 700; font-size: 20px'>Error: </span> <span style=' color: red;'> Usuário não cadastrado com sucesso!</span>";
         header("location: adicionar.php");
-        exit;
+        header("location: adicionar.php");
+      
     }
 }else{
+    $_SESSION['menssagem']="<span style=' color: red; font-weight: 700; font-size: 20px'>$email </span> <span style=' color: red;'> já existe!</span>";
     header("location: adicionar.php");
-    exit;
+   
 }
 
 

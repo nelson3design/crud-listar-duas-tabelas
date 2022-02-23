@@ -1,25 +1,53 @@
 <?php
+session_start(); // iniciar a sessão
  include 'config.php';
 
  $lista=[];
 
- $sql=$pdo->query('SELECT users.*, users_2.rua, users_2.bairro ,users_2.cidade FROM users INNER JOIN users_2 ON users.id= users_2.id_endereco');
+ if(!empty($_GET['pesquisa'])){
+    $data = $_GET['pesquisa'];
+    $sql = $pdo->query("SELECT users.*, users_2.rua, users_2.bairro ,users_2.cidade FROM users INNER JOIN users_2 ON users.id= users_2.id_endereco WHERE users.id= users_2.id_endereco LIKE '%$data%' or nome LIKE '%$data%' or email LIKE '%$data%' ORDER BY id DESC");
+  
+    if($sql->rowCount() > 0){
+    
+        $lista= $sql->fetchAll( PDO::FETCH_ASSOC);
+        
+    }
+ }else{
 
- if($sql->rowCount() > 0){
+     $sql=$pdo->query('SELECT users.*, users_2.rua, users_2.bairro ,users_2.cidade FROM users INNER JOIN users_2 ON users.id= users_2.id_endereco');
+    
+     if($sql->rowCount() > 0){
+    
+         $lista= $sql->fetchAll( PDO::FETCH_ASSOC);
+         
+     }
+    }
 
-     $lista= $sql->fetchAll( PDO::FETCH_ASSOC);
-     
- }
 
  
 
 ?>
 
 <button>
-    <a href="adicionar.php">adicionar</a>
+    <a style="text-decoration: none;" href="adicionar.php">adicionar</a>
 </button>
+<br>
+<br>
+<form action="" method="GET">
+    <input type="search" placeholder="pesquisar" name="pesquisa" id="pesquisar">
+    <input type="submit" value="pesquisar" onclick="searchData()">
+</form>
+<h4>quatidade de usuário cadastrado: <?php echo $sql->rowCount()?></h4>
 
-<h3>quatidade de usuario cadastrado: <?php echo $sql->rowCount()?></h3>
+<?php
+if(isset($_SESSION['menssagem'])){
+    echo  $_SESSION['menssagem'];
+    unset( $_SESSION['menssagem']);
+}
+
+?>
+<br>
 
 <table border="1" width= "100%" >
 
@@ -64,3 +92,20 @@
     <?php endforeach;?>
 
 </table>
+
+
+<script>
+    var pesquisar = document.getElementById('pesquisar');
+
+    pesquisar.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") 
+        {
+            searchData();
+        }
+    });
+
+    function searchData()
+    {
+        window.location = 'sistema.php?search='+pesquisar.value;
+    }
+</script>

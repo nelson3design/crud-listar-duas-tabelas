@@ -88,5 +88,7 @@ exit;
 
 
 <button type="submit">salvar</button>
+<button><a style="text-decoration: none;" href="index.php">Cancelar</a></button>
 
 </form>
+
